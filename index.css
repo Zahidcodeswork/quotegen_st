@@ -1,0 +1,857 @@
+/* @filename: index.css */
+/* --- Voxarel Quotation System - Global Styles --- */
+
+/* 1. Root Variables */
+:root {
+    --primary-color: #13293e;
+    --primary-light: #e6edf4;
+    --accent-color: #b62b35;
+    --danger-color: #ef4444;
+    --danger-light: #fee2e2;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --text-color: #1f2937;
+    --text-light: #6b7280;
+    --border-color: #d1d5db;
+    --surface-color: #ffffff;
+    --background-color: #f9fafb;
+    --border-radius: 8px;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+/* 2. Global Resets & Typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Google Sans', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+/* 3. Layout */
+.app-container {
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+header {
+    background-color: var(--surface-color);
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.brand-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .header-brand {
+        gap: 0.75rem;
+    }
+
+    .brand-logo {
+        height: 36px;
+    }
+}
+
+.form-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.main-form {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+/* 4. Stepper */
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+.step {
+    text-align: center;
+    position: relative;
+    flex: 1;
+}
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.5rem;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+.step-title {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+.step.active .step-number {
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+.step.active .step-title {
+    color: var(--primary-color);
+}
+.step-connector {
+    flex: 1;
+    height: 2px;
+    background-color: var(--border-color);
+    margin: 0 1rem;
+    transform: translateY(-1rem);
+}
+
+/* 5. Form Elements */
+.form-section {
+    border: none;
+    margin-bottom: 2rem;
+}
+.form-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+.form-group {
+    position: relative;
+}
+.grid-span-all {
+    grid-column: 1 / -1;
+}
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    background-color: var(--surface-color);
+    color: var(--text-color);
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+.form-group label {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    color: var(--text-light);
+    background-color: var(--surface-color);
+    padding: 0 0.25rem;
+    transition: var(--transition-fast);
+    pointer-events: none;
+}
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group select:valid + label,
+.form-group select:not([value=""]) + label,
+.form-group textarea:not(:placeholder-shown) + label,
+.form-group textarea:focus + label {
+    top: -0.6rem;
+    font-size: 0.75rem;
+    color: var(--primary-color);
+}
+/* This is a trick to make it work for non-empty value fields too */
+input:not(:placeholder-shown) {
+  padding-top: 1.25rem;
+  padding-bottom: 0.25rem;
+}
+.form-error {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--danger-color);
+    font-size: 0.8rem;
+}
+.form-error-block {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--danger-light);
+    color: var(--danger-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--danger-color);
+}
+.calculated-field {
+    background-color: var(--background-color);
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.calculated-field label {
+    font-weight: 500;
+    color: var(--text-light);
+}
+.calculated-field span {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: var(--surface-color);
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.checkbox-group:hover {
+    border-color: var(--primary-color);
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 1.25em;
+    height: 1.25em;
+    accent-color: var(--primary-color);
+}
+
+.checkbox-group label {
+    font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* 6. Item Card */
+.item-card {
+    background-color: #f9fafb;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+}
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+.item-grid.metrics-row {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    background: var(--background-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+}
+
+/* 7. Buttons */
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #0f2233;
+}
+.btn-secondary {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+.btn-secondary:hover {
+    background-color: #f3f4f6;
+}
+.btn-danger {
+    background-color: var(--danger-light);
+    color: var(--danger-color);
+    border: none;
+}
+.btn-danger:hover {
+    background-color: #fecaca;
+}
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+.add-item-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border: 1px dashed var(--primary-color);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    margin-top: 1rem;
+}
+.add-item-btn:hover {
+    background-color: #dbe6f0;
+}
+
+/* 8. Summary Sidebar */
+.summary-sidebar-desktop {
+    position: sticky;
+    top: 2rem;
+}
+.summary-section {
+    background-color: var(--surface-color);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+.summary-value {
+    font-weight: 600;
+}
+.grand-total {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.summary-divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 1rem 0;
+}
+
+/* 9. Dashboard */
+.dashboard-container {
+    background-color: var(--surface-color);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+.dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.summary-card {
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    box-shadow: var(--shadow-sm);
+}
+.summary-card strong {
+    font-size: 1.5rem;
+}
+.summary-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.dashboard-search,
+.dashboard-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.dashboard-header input {
+    padding: 0.6rem 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    width: 300px;
+}
+.dashboard-header select {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: #fff;
+    font-size: 0.95rem;
+}
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.dashboard-table th, .dashboard-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.dashboard-table th {
+    background-color: #f9fafb;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-light);
+}
+.dashboard-table td .btn + .btn {
+    margin-left: 0.5rem;
+}
+.dashboard-table tr.voided-quote {
+    background-color: #fef2f2;
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+.dashboard-table tr.voided-quote .status-badge {
+    text-decoration: none;
+}
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+.status-active { background-color: #dcfce7; color: #166534; }
+.status-voided { background-color: #fee2e2; color: #991b1b; }
+.status-draft { background-color: #fefce8; color: #92400e; }
+.status-converted { background-color: #cffafe; color: #0f766e; }
+.status-expired { background-color: #fee2e2; color: #b91c1c; }
+.empty-dashboard {
+    text-align: center;
+    padding: 4rem;
+    color: var(--text-light);
+}
+
+/* 10. Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-content {
+    background-color: var(--surface-color);
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow-y: auto;
+}
+.modal-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background-color: var(--surface-color);
+    gap: 1rem;
+}
+.modal-header .brand-logo {
+    height: 42px;
+}
+.modal-header > div {
+    flex: 1;
+}
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-light);
+}
+.modal-body {
+    padding: 1.5rem;
+}
+.unsaved-banner {
+    background-color: #eef2ff;
+    color: #312e81;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+.void-reason-badge {
+    background-color: var(--danger-light);
+    color: var(--danger-color);
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--danger-color);
+}
+.void-reason-badge strong {
+    font-weight: 600;
+}
+.quote-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+}
+.modal-footer .btn + .btn {
+    margin-left: 0.5rem;
+}
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.modal-summary {
+    margin-top: 1.5rem;
+    max-width: 280px;
+    margin-left: auto;
+}
+
+.quote-terms {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #f3f4f6;
+}
+
+.quote-terms h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+}
+
+.quote-terms ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.35;
+}
+.modal-table th, .modal-table td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.875rem;
+}
+.modal-table th {
+    background-color: #f9fafb;
+}
+
+.inclusions-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.inclusions-list li {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    min-width: 280px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    color: #fff;
+    z-index: 1100;
+    gap: 1rem;
+}
+.toast button.toast-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.toast-success { background: #22c55e; }
+.toast-error { background: #ef4444; }
+.toast-info { background: #6366f1; }
+.inline-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+.item-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--warning-color);
+}
+.text-muted {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+.table-primary-text {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+
+/* 11. Responsive Layouts */
+@media (max-width: 1024px) {
+    .app-container {
+        margin: 1.5rem auto;
+        padding: 0 1.5rem;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .form-content {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-sidebar-desktop {
+        position: static;
+        width: 100%;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        margin: 1rem auto 2.5rem;
+        padding: 0 1rem 4.5rem;
+    }
+
+    header {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .stepper {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        padding: 1.25rem;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-align: left;
+    }
+
+    .step-number {
+        margin: 0;
+    }
+
+    .step-connector {
+        display: none;
+    }
+
+    .main-form {
+        padding: 1.5rem;
+    }
+
+    .summary-sidebar-desktop {
+        margin-top: 1.5rem;
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .checkbox-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .item-card {
+        padding: 1.25rem;
+    }
+
+    .item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .navigation-buttons .btn {
+        width: 100%;
+    }
+
+    .dashboard-container {
+        padding: 1.5rem;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dashboard-controls,
+    .dashboard-search,
+    .dashboard-filters {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .dashboard-controls {
+        gap: 0.75rem;
+    }
+
+    .dashboard-search input,
+    .dashboard-filters select,
+    .dashboard-filters button {
+        width: 100%;
+    }
+
+    .summary-section {
+        margin-top: 1.5rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-height: 92vh;
+    }
+
+    .modal-header,
+    .modal-footer {
+        padding: 1rem;
+    }
+
+    .modal-footer {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .modal-footer .btn {
+        flex: 1 1 100%;
+    }
+
+    .modal-body {
+        padding: 1.25rem;
+    }
+
+    .modal-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .quote-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    header,
+    .main-form,
+    .dashboard-container {
+        padding: 1.25rem 1rem;
+    }
+
+    .add-item-btn {
+        font-size: 0.95rem;
+    }
+
+    .item-grid,
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
