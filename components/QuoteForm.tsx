@@ -6,7 +6,7 @@ import { ProcessedQuoteItem, QuoteItemInput, SavedQuote } from '../app/types';
 
 interface QuoteFormProps {
     onBackToDashboard: () => void;
-    onQuoteCreated: (quote: SavedQuote) => void;
+    onQuoteCreated: (quote: SavedQuote) => Promise<void>;
     onValidationError: (messages: string[]) => void;
 }
 
@@ -392,12 +392,12 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onBackToDashboard, onQuoteCreated
         skipDraftSaveRef.current = false;
         return () => {
             if (!skipDraftSaveRef.current) {
-                latestSaveDraftRef.current();
+                void latestSaveDraftRef.current();
             }
         };
     }, []);
 
-    const handleSubmit = (event: FormEvent) => {
+    const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
         if (step < 3) {
             goToStep(step + 1);
@@ -410,13 +410,17 @@ const QuoteForm: React.FC<QuoteFormProps> = ({ onBackToDashboard, onQuoteCreated
         }
         if (result.quote) {
             skipDraftSaveRef.current = true;
-            onQuoteCreated(result.quote);
-            reset();
+            try {
+                await onQuoteCreated(result.quote);
+                reset();
+            } catch (error) {
+                console.error('Failed to create quote', error);
+            }
         }
     };
 
-    const handleViewDashboard = () => {
-        saveDraft();
+    const handleViewDashboard = async () => {
+        await latestSaveDraftRef.current();
         skipDraftSaveRef.current = true;
         onBackToDashboard();
     };

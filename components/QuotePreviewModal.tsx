@@ -7,9 +7,9 @@ interface QuotePreviewModalProps {
     quote: SavedQuote;
     isDraft: boolean;
     onClose: () => void;
-    onSave: (quote: SavedQuote) => void;
+    onSave: (quote: SavedQuote) => Promise<void> | void;
     onDownloadPdf: (quote: SavedQuote) => void | Promise<void>;
-    onVoid: (quote: SavedQuote) => void;
+    onVoid: (quote: SavedQuote) => Promise<SavedQuote | null> | void;
 }
 
 const QuotePreviewModal: React.FC<QuotePreviewModalProps> = ({ quote, isDraft, onClose, onSave, onDownloadPdf, onVoid }) => (
@@ -100,12 +100,12 @@ const QuotePreviewModal: React.FC<QuotePreviewModalProps> = ({ quote, isDraft, o
             <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={onClose}>Close</button>
                 {quote.status !== 'Voided' && (
-                    <button className="btn btn-danger" onClick={() => onVoid(quote)}>Void Quote</button>
+                    <button className="btn btn-danger" onClick={() => { void onVoid(quote); }}>Void Quote</button>
                 )}
                 {isDraft && (
-                    <button className="btn btn-primary" onClick={() => onSave(quote)}>Save to Dashboard</button>
+                    <button className="btn btn-primary" onClick={() => { void onSave(quote); }}>Save to Dashboard</button>
                 )}
-                <button className="btn btn-primary" onClick={() => onDownloadPdf(quote)}>Download PDF</button>
+                <button className="btn btn-primary" onClick={() => { void onDownloadPdf(quote); }}>Download PDF</button>
             </div>
         </div>
     </div>

@@ -20,7 +20,7 @@ interface QuoteFormHook {
     removeItem: (id: number) => void;
     toggleItemSelection: (id: number, checked: boolean) => void;
     generateQuote: () => { success: boolean; errors?: QuoteValidationError[]; quote?: SavedQuote };
-    saveDraft: () => SavedQuote | null;
+    saveDraft: () => Promise<SavedQuote | null>;
     reset: (keepDashboard?: boolean) => void;
 }
 
@@ -107,11 +107,16 @@ export const useQuoteForm = (): QuoteFormHook => {
         return { success: true, quote };
     };
 
-    const saveDraft = useCallback((): SavedQuote | null => {
+    const saveDraft = useCallback(async (): Promise<SavedQuote | null> => {
         if (!form.quoteNo) return null;
         const draftState = buildDraftState(form, items);
         const draftQuote = createQuoteFromDraft(draftState, 'Draft');
-        return persistQuote(draftQuote, 'Draft');
+        try {
+            return await persistQuote(draftQuote, 'Draft');
+        } catch (error) {
+            console.error('Failed to save draft', error);
+            return null;
+        }
     }, [form, items, persistQuote]);
 
     const reset = (keepDashboard = false) => {

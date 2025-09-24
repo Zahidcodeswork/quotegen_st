@@ -4,6 +4,16 @@ export type PaymentMethod = 'Cash' | 'Card' | 'Bank Transfer' | 'Payment Link';
 export type PaymentStatus = 'Pending' | 'Partial' | 'Completed';
 export type QuoteStatus = 'Draft' | 'Active' | 'Converted' | 'Expired' | 'Voided';
 export type ApprovalStatus = 'Pending' | 'Approved' | 'Rejected';
+export type UserRole = 'user' | 'admin';
+
+export interface UserProfile {
+    id: string;
+    email: string | null;
+    role: UserRole;
+    fullName?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
+}
 
 export interface QuoteFormData {
     name: string;
@@ -78,6 +88,11 @@ export interface SavedQuote {
     approvalStatus?: ApprovalStatus;
     modifiedBy?: string;
     originalQuoteData?: SavedQuote;
+    id?: string;
+    userId?: string;
+    ownerEmail?: string | null;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface QuoteDraftState {

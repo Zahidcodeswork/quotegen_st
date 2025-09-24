@@ -7,7 +7,14 @@ interface DashboardProps {
     quotes: SavedQuote[];
     onCreateNew: () => void;
     onPreview: (quote: SavedQuote) => void;
-    onVoid: (quote: SavedQuote) => void;
+    onVoid: (quote: SavedQuote) => Promise<SavedQuote | null> | void;
+    onSignOut: () => Promise<void> | void;
+    userEmail: string | null;
+    loading?: boolean;
+    error?: string | null;
+    onRefresh?: () => void;
+    isAdmin?: boolean;
+    onManageUsers?: () => void;
 }
 
 const statusLabels: Record<QuoteStatus, string> = {
@@ -20,7 +27,19 @@ const statusLabels: Record<QuoteStatus, string> = {
 
 const statusFilters: QuoteStatus[] = ['Active', 'Draft', 'Converted', 'Expired', 'Voided'];
 
-export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPreview, onVoid }) => {
+export const Dashboard: React.FC<DashboardProps> = ({
+    quotes,
+    onCreateNew,
+    onPreview,
+    onVoid,
+    onSignOut,
+    userEmail,
+    loading,
+    error,
+    onRefresh,
+    isAdmin,
+    onManageUsers,
+}) => {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<QuoteStatus | 'All'>('All');
 
@@ -30,11 +49,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPre
             const matchesSearch = !term ||
                 quote.quoteNo.toLowerCase().includes(term) ||
                 quote.formData.name.toLowerCase().includes(term) ||
-                quote.formData.contactNumber.toLowerCase().includes(term);
+                quote.formData.contactNumber.toLowerCase().includes(term) ||
+                (isAdmin && quote.ownerEmail?.toLowerCase().includes(term));
             const matchesStatus = statusFilter === 'All' || quote.status === statusFilter;
             return matchesSearch && matchesStatus;
         });
-    }, [quotes, search, statusFilter]);
+    }, [isAdmin, quotes, search, statusFilter]);
 
     const statusCounts = useMemo(() => {
         return statusFilters.reduce<Record<QuoteStatus, number>>((acc, status) => {
@@ -57,11 +77,26 @@ export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPre
                     <div>
                         <h1>Quote Dashboard</h1>
                         <p className="text-muted">Monitor, filter, and manage all generated quotations.</p>
+                        {userEmail && <p className="text-muted" style={{ fontSize: '0.85rem' }}>Signed in as {userEmail}</p>}
                     </div>
                 </div>
-                <button className="btn btn-primary" onClick={onCreateNew}>Create New Quote</button>
+                <div className="dashboard-actions">
+                    {isAdmin && onManageUsers && (
+                        <button className="btn btn-secondary" onClick={onManageUsers}>Manage Users</button>
+                    )}
+                    {onRefresh && (
+                        <button className="btn btn-secondary" onClick={() => { void onRefresh(); }}>Refresh</button>
+                    )}
+                    <button className="btn btn-secondary" onClick={() => { void onSignOut(); }}>Sign Out</button>
+                    <button className="btn btn-primary" onClick={onCreateNew}>Create New Quote</button>
+                </div>
             </header>
             <div className="dashboard-container">
+                {error && (
+                    <div className="form-error-block" role="alert" style={{ marginBottom: '1rem' }}>
+                        {error}
+                    </div>
+                )}
                 <div className="dashboard-summary">
                     {statusFilters.map(status => (
                         <div key={status} className="summary-card">
@@ -88,7 +123,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPre
                         </select>
                     </div>
                 </div>
-                {filteredQuotes.length > 0 ? (
+                {loading ? (
+                    <div className="empty-dashboard">
+                        <p>Loading quotes…</p>
+                    </div>
+                ) : filteredQuotes.length > 0 ? (
                     <table className="dashboard-table">
                         <thead>
                             <tr>
@@ -99,6 +138,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPre
                                 <th>Total</th>
                                 <th>Status</th>
                                 <th>Date</th>
+                                {isAdmin && <th>Owner</th>}
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -115,10 +155,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ quotes, onCreateNew, onPre
                                     <td>{formatCurrency(quote.totals.grandTotal)}</td>
                                     <td><span className={`status-badge status-${quote.status.toLowerCase()}`}>{statusLabels[quote.status]}</span></td>
                                     <td>{new Date(quote.date).toLocaleDateString()}</td>
+                                    {isAdmin && <td>{quote.ownerEmail ?? '—'}</td>}
                                     <td>
                                         <button className="btn btn-secondary" onClick={() => onPreview(quote)}>View</button>
                                         {quote.status !== 'Voided' && (
-                                            <button className="btn btn-danger" onClick={() => onVoid(quote)}>Void</button>
+                                            <button className="btn btn-danger" onClick={() => { void onVoid(quote); }}>Void</button>
                                         )}
                                     </td>
                                 </tr>
